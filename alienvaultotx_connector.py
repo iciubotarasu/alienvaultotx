@@ -115,7 +115,8 @@ class AlienvaultOtxv2Connector(BaseConnector):
 
         # Try a json parse
         try:
-            resp_json = r.json()
+            resp_json_unformatted = r.json()
+            resp_json = json.loads(json.dumps(resp_json_unformatted).replace('\\u0000', '\\\\u0000'))
         except Exception as e:
             error_msg = self._get_error_message_from_exception(e)
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(error_msg)), None)
